@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "NodeNext",
+    "module": "nodenext",
     "noImplicitAny": true,
     "strict": true
   },
-  "files": ["index.ts"]
+  "files": ["src/fetchtokens.ts"]
 }
