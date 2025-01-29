@@ -2,28 +2,15 @@ import fs from "fs/promises";
 import path from "path";
 import { z } from "zod";
 
-const TOKENS_FILE = path.join(".", "data", "tokens", "tokens.json");
+import { rateLimit, ensureDirectoriesExist } from "./utils.ts";
+
+const TOKENS_FILE = path.join(".", "data", "tokens.json");
 
 const tokenArticlesSchema = z.object({
   articles: z.object({
     bm: z.array(z.number()),
   }),
 });
-
-// Limit the number of times an async requests to 1 per second so we don't overload the API
-const rateLimit = <T extends Array<unknown>, U>(fn: (...args: T) => Promise<U>) => {
-  let lastCalledMs = 0;
-
-  return async (...args: T): Promise<U> => {
-    while (Date.now() - lastCalledMs < 1000) {
-      await new Promise((resolve) => setTimeout(resolve, 1000 - (Date.now() - lastCalledMs)));
-    }
-
-    lastCalledMs = Date.now();
-
-    return fn(...args);
-  };
-};
 
 const fetchArticlesByToken = rateLimit(async (token: string) => {
   console.log(`Fetching articles for "${token}"`);
@@ -48,11 +35,5 @@ const tokensWithArticles = await Promise.all(
   })),
 );
 
-const directory = path.dirname(TOKENS_FILE);
-try {
-  await fs.access(directory, fs.constants.F_OK);
-} catch {
-  await fs.mkdir(directory, { recursive: true });
-}
-
+await ensureDirectoriesExist(path.dirname(TOKENS_FILE));
 await fs.writeFile(TOKENS_FILE, JSON.stringify(tokensWithArticles, null, 2));
