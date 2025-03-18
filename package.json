@@ -19,6 +19,10 @@
     "@types/node": "^22.12.0"
   },
   "scripts": {
+    "clean:all": "rm -r data",
+    "clean:articles": "rm -r data/articles",
+    "clean:entries": "rm -r data/entries",
+    "clean:tokens": "rm data/tokens.json",
     "format": "prettier --write .",
     "fetcharticles": "tsx src/fetcharticles.ts",
     "fetchtokens": "tsx src/fetchtokens.ts",
