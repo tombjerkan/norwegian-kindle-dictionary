@@ -48,8 +48,8 @@ This will generate an HTML dictionary entry for the article IDs passed as argume
 
 For example, `npm run generateentries 1001 1002 1003` will create the dictionary entry files `data/entries/1001.html`, `data/entries/1002.html`, and `data/entries/1003.html`.
 
-To run with the example data set:
+To run with the example data set:  
 `npm run generateentries $(<./example-data/articleids.txt)`.
 
-To run with every article ID found in `data/articles`:
+To run with every article ID found in `data/articles`:  
 `npm run generateentries $(for fname in data/articles/*; do basename $fname .json; done)`
