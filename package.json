@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "prettier": "^3.4.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "zod": "^3.24.1"
@@ -19,6 +21,7 @@
   "scripts": {
     "format": "prettier --write .",
     "fetcharticles": "tsx src/fetcharticles.ts",
-    "fetchtokens": "tsx src/fetchtokens.ts"
+    "fetchtokens": "tsx src/fetchtokens.ts",
+    "generateentries": "tsx src/generateentries.tsx"
   }
 }
