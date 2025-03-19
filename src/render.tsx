@@ -2,12 +2,15 @@ import React from "react";
 import {
   Article,
   Definition,
+  DefinitionElement,
   Example,
   Explanation,
   isDefinition,
   isExample,
   isExplanation,
+  isSubArticle,
   Item,
+  SubArticle,
 } from "./articleschema";
 import assert from "assert";
 import concepts from "./concepts";
@@ -85,11 +88,20 @@ function Etymology(props: { article: Article }) {
   );
 }
 
+function getNestedSubArticles(definition: Definition) {
+  const subArticles = definition.elements.filter(isSubArticle);
+  const subDefinitions = definition.elements.filter(isDefinition);
+
+  return [...subArticles, ...subDefinitions.flatMap(getNestedSubArticles)];
+}
+
 function Definitions(props: { article: Article }) {
   const rootDefinition = props.article.body.definitions[0];
 
   const isDefinitionList = (elements: Definition["elements"]): elements is Definition[] =>
     elements.every(isDefinition);
+
+  const subArticles = getNestedSubArticles(rootDefinition);
 
   return (
     <>
@@ -100,6 +112,8 @@ function Definitions(props: { article: Article }) {
       ) : (
         <DefinitionView definition={rootDefinition} />
       )}
+
+      {subArticles.length > 0 && <SubArticleList subArticles={subArticles} />}
     </>
   );
 }
@@ -177,6 +191,41 @@ function SubDefinitionView(props: { definition: Definition }) {
 
   return (
     <>
+      {explanations.map((e) => (
+        <ExplanationView explanation={e} />
+      ))}
+
+      {examples.map((e) => (
+        <ExampleView example={e} />
+      ))}
+    </>
+  );
+}
+
+function SubArticleList(props: { subArticles: SubArticle[] }) {
+  return (
+    <>
+      <h4>Faste uttrykk</h4>
+      <ul>
+        {props.subArticles.map((subArticle) => (
+          <li>
+            <SubArticleView subArticle={subArticle} />
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+function SubArticleView(props: { subArticle: SubArticle }) {
+  const definition = props.subArticle.article.body.definitions[0];
+  const explanations = definition.elements.filter(isExplanation);
+  const examples = definition.elements.filter(isExample);
+
+  return (
+    <>
+      <span>{props.subArticle.lemmas[0]}</span>
+
       {explanations.map((e) => (
         <ExplanationView explanation={e} />
       ))}

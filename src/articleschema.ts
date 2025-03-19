@@ -107,9 +107,24 @@ const compoundListSchema = z.object({
   }),
 });
 
-// TODO: define the full schema for sub-articles when they are supported in in the rendering
+/* I have redefined a subset of the article definition as recursive definitions difficult to handle
+ * with Zod. Since the parts used are limited, redefining them seemed like a clearer solution than
+ * restructuring the code to handle recursion properly. */
 const subArticleSchema = z.object({
   type_: z.literal("sub_article"),
+  lemmas: z.array(z.string()).length(1),
+  article: z.object({
+    body: z.object({
+      definitions: z
+        .array(
+          z.object({
+            type_: z.literal("definition"),
+            elements: z.array(z.union([explanationSchema, exampleSchema])),
+          }),
+        )
+        .length(1),
+    }),
+  }),
 });
 
 const baseDefinitionSchema = z.object({
@@ -197,4 +212,8 @@ export function isExplanation(element: DefinitionElement): element is Explanatio
 
 export function isExample(element: DefinitionElement): element is Example {
   return element.type_ === "example";
+}
+
+export function isSubArticle(element: DefinitionElement): element is SubArticle {
+  return element.type_ === "sub_article";
 }
