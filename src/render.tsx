@@ -113,6 +113,7 @@ function DefinitionList(props: { definitions: Definition[] }) {
 function DefinitionView(props: { definition: Definition }) {
   const explanations = props.definition.elements.filter(isExplanation);
   const examples = props.definition.elements.filter(isExample);
+  const subDefinitions = props.definition.elements.filter(isDefinition);
 
   return (
     <>
@@ -125,6 +126,8 @@ function DefinitionView(props: { definition: Definition }) {
       {examples.map((e) => (
         <ExampleView example={e} />
       ))}
+
+      {subDefinitions.length > 0 && <SubDefinitionList definitions={subDefinitions} />}
     </>
   );
 }
@@ -147,6 +150,35 @@ function ExampleView(props: { example: Example }) {
         <Content {...props.example.explanation} />
       </p>
     </div>
+  );
+}
+
+function SubDefinitionList(props: { definitions: Definition[] }) {
+  return (
+    <ul>
+      {props.definitions.map((definition) => (
+        <li>
+          <SubDefinitionView definition={definition} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function SubDefinitionView(props: { definition: Definition }) {
+  const explanations = props.definition.elements.filter(isExplanation);
+  const examples = props.definition.elements.filter(isExample);
+
+  return (
+    <>
+      {explanations.map((e) => (
+        <ExplanationView explanation={e} />
+      ))}
+
+      {examples.map((e) => (
+        <ExampleView example={e} />
+      ))}
+    </>
   );
 }
 
