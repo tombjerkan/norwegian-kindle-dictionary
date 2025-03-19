@@ -121,7 +121,7 @@ function DefinitionView(props: { definition: Definition }) {
         <ExplanationView explanation={e} />
       ))}
 
-      {examples.length > 0 && <h3>Examples</h3>}
+      {examples.length > 0 && <h3>Eksempel</h3>}
 
       {examples.map((e) => (
         <ExampleView example={e} />
