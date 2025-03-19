@@ -56,6 +56,12 @@ function WordType(props: { article: Article }) {
       return <div>ADJEKTIV</div>;
     case "verb":
       return <div>VERB</div>;
+    case "m1":
+      return <div>SUBSTANTIV hankjønn</div>;
+    case "n1":
+      return <div>SUBSTANTIV intetkjønn</div>;
+    case "v1":
+      return <div>VERB</div>;
     default:
       console.error("Unknown word type:", wordType);
       return <div>Unknown: {wordType}</div>;
