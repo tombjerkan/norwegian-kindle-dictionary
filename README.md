@@ -53,3 +53,24 @@ To run with the example data set:
 
 To run with every article ID found in `data/articles`:  
 `npm run generateentries $(for fname in data/articles/*; do basename $fname .json; done)`
+
+# Test generated entries
+
+`npm run testentries <article_id>...`
+
+This will test the generate entry HTML text content against reference HTML taken copied from the Ordbok website itself. Only the text content is compared, not the structure of the HTML. Differences will be printed to the console, with green signaling text present in the generated entry but not in the reference HTML, and red signaling text present in the reference HTML but not the generated entry.
+
+Note: you must generate the entry HTML files yourself (using the `generateentries` script) before running this script.
+
+The script will throw an error if either the entiry HTML file or reference HTML does not exist for an article ID.
+
+To run with every reference HTML file found in `test-data`:  
+`npm run testentries $(for fname in test-data/*; do basename $fname .html; done)`
+
+## Getting reference HTML
+
+1. Go to the Ordbok website: https://ordbokene.no/nno/bm
+2. Search for the word in question.
+3. Find the part of the webpage corresponding to the article. One page on the website might contain multiple articles for a single word.
+4. Inspect the page HTML and find the `div` element with an ID attribute of the format `bm_<article_id>_body`. Copy this element.
+5. Paste the copied HTML into a new file at `test-data/<article_id>.html`.

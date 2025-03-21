@@ -54,17 +54,16 @@ function WordType(props: { article: Article }) {
 
   switch (wordType) {
     case "CCONJ":
-      return <div>KONJUNKSJON</div>;
+      return <div>konjunksjon</div>;
     case "a1":
-      return <div>ADJEKTIV</div>;
+      return <div>adjektiv</div>;
     case "verb":
-      return <div>VERB</div>;
-    case "m1":
-      return <div>SUBSTANTIV hankjønn</div>;
-    case "n1":
-      return <div>SUBSTANTIV intetkjønn</div>;
     case "v1":
-      return <div>VERB</div>;
+      return <div>verb</div>;
+    case "m1":
+      return <div>substantiv hankjønn</div>;
+    case "n1":
+      return <div>substantiv intetkjønn</div>;
     default:
       console.error("Unknown word type:", wordType);
       return <div>Unknown: {wordType}</div>;
@@ -141,11 +140,8 @@ function DefinitionView(props: { definition: Definition }) {
         <ExplanationView explanation={e} />
       ))}
 
-      {examples.length > 0 && <h3>Eksempel</h3>}
-
-      {examples.map((e) => (
-        <ExampleView example={e} />
-      ))}
+      {examples.length > 0 && <h5>Eksempel</h5>}
+      <ExampleList examples={examples} />
 
       {subDefinitions.length > 0 && <SubDefinitionList definitions={subDefinitions} />}
     </>
@@ -160,16 +156,22 @@ function ExplanationView(props: { explanation: Explanation }) {
   );
 }
 
-function ExampleView(props: { example: Example }) {
+function ExampleList(props: { examples: Example[] }) {
   return (
-    <div className="example">
-      <blockquote>
-        <Content {...props.example.quote} />
-      </blockquote>
-      <p>
-        <Content {...props.example.explanation} />
-      </p>
-    </div>
+    <ul>
+      {props.examples.map((example) => (
+        <li>
+          <em>
+            <Content {...example.quote} />
+          </em>
+          {example.explanation.content !== "" && (
+            <p>
+              <Content {...example.explanation} />
+            </p>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -195,9 +197,7 @@ function SubDefinitionView(props: { definition: Definition }) {
         <ExplanationView explanation={e} />
       ))}
 
-      {examples.map((e) => (
-        <ExampleView example={e} />
-      ))}
+      <ExampleList examples={examples} />
     </>
   );
 }
@@ -230,9 +230,7 @@ function SubArticleView(props: { subArticle: SubArticle }) {
         <ExplanationView explanation={e} />
       ))}
 
-      {examples.map((e) => (
-        <ExampleView example={e} />
-      ))}
+      <ExampleList examples={examples} />
     </>
   );
 }
